@@ -1,0 +1,26 @@
+{
+
+  "PortName": "COM9",
+  "BaudRate": 57600,
+
+  "PlcIpAddress": "192.168.0.190",
+  "PlcPort": 5018,
+
+  "XiaoJingMax": 200,
+  "XiaoJingMin": 100,
+
+  "DaJingMax": 200,
+  "DaJingMin": 100,
+
+  "HuoSaiMax": 200,
+  "HuoSaiMin": 100,
+
+  "CaoJingMax": 200,
+  "CaoJingMin": 100,
+
+  "BushMax": 200,
+  "BushMin": 100,
+
+  "CaoGaoMax": 200,
+  "CaoGaoMin": 100
+}
