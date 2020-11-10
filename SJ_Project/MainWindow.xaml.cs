@@ -43,7 +43,7 @@ namespace SJ_Project
         private List<float> flist1 = new List<float>();
         private bool remark = false;
         private bool sPort = false;
-        private int row = 0;
+        private int row = -1;
         private int sheetSum = 0;
         private string fileName = null;
         private IWorkbook workbook = null;
@@ -75,10 +75,10 @@ namespace SJ_Project
             connect = plc.ConnectServer();
 
             #region PLC连接定时器
-            //timer1 = new System.Windows.Threading.DispatcherTimer();
-            //timer1.Tick += new EventHandler(ThreadCheck);
-            //timer1.Interval = new TimeSpan(0, 0, 0, 5);
-            //timer1.Start();
+            timer1 = new System.Windows.Threading.DispatcherTimer();
+            timer1.Tick += new EventHandler(ThreadCheck);
+            timer1.Interval = new TimeSpan(0, 0, 0, 5);
+            timer1.Start();
             #endregion
 
             //CycleDataRead();
@@ -158,10 +158,13 @@ namespace SJ_Project
                 try
                 {
                     // 创建文件
-                    if (row == 0 || row > 40000)
+                    var date = DateTime.Now.ToString("yyyyMMdd");
+                    Path = Path + "\\" + date;
+                    if (!System.IO.Directory.Exists(Path))
+                        System.IO.Directory.CreateDirectory(Path);
+                    if (row == -1 || row > 40000)
                     {
-                        if (!System.IO.Directory.Exists(Path))
-                            System.IO.Directory.CreateDirectory(Path);
+
                         if (sheetSum == 0 || sheetSum > 250)
                         {
                             fileName = DateTime.Now.ToString("yyyyMMdd-HHmm") + ".xls";
@@ -189,11 +192,40 @@ namespace SJ_Project
 
                     #region 小径读取信号
                     var xiaor = plc.ReadBool("M100");
-                    
+
                     if (xiaor.IsSuccess && xiaor.Content)
                     {
                         if (gwType == GwType.小径)
                         {
+                            #region clear
+                            xiaolist.ItemsSource = null;
+                            xiaolist.Items.Refresh();
+                            xiaoResult.Text = "";
+                            dalist.ItemsSource = null;
+                            dalist.Items.Refresh();
+                            daResult.Text = "";
+                            huolist.ItemsSource = null;
+                            huolist.Items.Refresh();
+                            huoResult.Text = "";
+                            caojlist.ItemsSource = null;
+                            caojlist.Items.Refresh();
+                            caojResult.Text = "";
+                            bushlist.ItemsSource = null;
+                            bushlist.Items.Refresh();
+                            bushResult.Text = "";
+                            caogaolist.ItemsSource = null;
+                            caogaolist.Items.Refresh();
+                            caogaoResult.Text = "";
+                            ErrorInfo.Text = "";
+                            xiaolist.Background = Brushes.SteelBlue;
+                            dalist.Background = Brushes.SteelBlue;
+                            huolist.Background = Brushes.SteelBlue;
+                            caogaolist.Background = Brushes.SteelBlue;
+                            caojlist.Background = Brushes.SteelBlue;
+                            bushlist.Background = Brushes.SteelBlue;
+                            #endregion
+
+                            Thread.Sleep(config.FirstTime);
                             ErrorInfo.Text = "测量开始！";
                             flist.Clear();
                             //读取数据
@@ -204,7 +236,7 @@ namespace SJ_Project
                                 if (i != 3)
                                     Thread.Sleep(config.XiaoJingTime);
                             }
-                            log.Info(flist.Count()+"  "+flist.First());
+                            log.Info(flist.Count() + "  " + flist.First());
                             // write to excel
                             workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
                             var sheet = workbook.GetSheetAt(sheetSum - 1);
@@ -244,6 +276,7 @@ namespace SJ_Project
                             {
                                 plc.Write("M120", true);
                                 xiaoResult.Text = "NG";
+                                xiaolist.Background = Brushes.Red;
                             }
                         }
                         else
@@ -260,6 +293,7 @@ namespace SJ_Project
                         xiaolist.Items.Refresh();
                         xiaoResult.Text = "";
                         ErrorInfo.Text = "";
+                        xiaolist.Background = Brushes.SteelBlue;
                     }
 
                     #endregion
@@ -270,6 +304,7 @@ namespace SJ_Project
                     {
                         if (gwType == GwType.大径活塞高度)
                         {
+                            Thread.Sleep(config.FirstTime);
                             ErrorInfo.Text = "测量开始！";
                             flist.Clear();
                             flist1.Clear();
@@ -334,7 +369,7 @@ namespace SJ_Project
                             });
 
                             // 回写PLC
-                            if (mark && mark1)
+                            if (mark)
                             {
                                 plc.Write("M111", true);
                                 gwType = GwType.槽径;
@@ -346,6 +381,8 @@ namespace SJ_Project
                                 plc.Write("M121", true);
                                 daResult.Text = "NG";
                                 huoResult.Text = "NG";
+                                dalist.Background = Brushes.Red;
+                                huolist.Background = Brushes.Red;
                             }
                         }
                         else
@@ -365,6 +402,8 @@ namespace SJ_Project
                         huolist.Items.Refresh();
                         huoResult.Text = "";
                         ErrorInfo.Text = "";
+                        dalist.Background = Brushes.SteelBlue;
+                        huolist.Background = Brushes.SteelBlue;
                     }
                     #endregion
 
@@ -374,6 +413,7 @@ namespace SJ_Project
                     {
                         if (gwType == GwType.槽径)
                         {
+                            Thread.Sleep(config.FirstTime);
                             ErrorInfo.Text = "测量开始！";
                             flist.Clear();
                             //读取数据
@@ -423,6 +463,7 @@ namespace SJ_Project
                             {
                                 plc.Write("M122", true);
                                 caojResult.Text = "NG";
+                                caojlist.Background = Brushes.Red;
                             }
                         }
                         else
@@ -439,6 +480,7 @@ namespace SJ_Project
                         caojlist.Items.Refresh();
                         caojResult.Text = "";
                         ErrorInfo.Text = "";
+                        caojlist.Background = Brushes.SteelBlue;
                     }
                     #endregion
 
@@ -448,6 +490,7 @@ namespace SJ_Project
                     {
                         if (gwType == GwType.BUSH)
                         {
+                            Thread.Sleep(config.FirstTime);
                             ErrorInfo.Text = "测量开始！";
                             flist.Clear();
                             //读取数据
@@ -497,6 +540,7 @@ namespace SJ_Project
                             {
                                 plc.Write("M123", true);
                                 bushResult.Text = "NG";
+                                bushlist.Background = Brushes.Red;
                             }
                         }
                         else
@@ -513,6 +557,7 @@ namespace SJ_Project
                         bushlist.Items.Refresh();
                         bushResult.Text = "";
                         ErrorInfo.Text = "";
+                        bushlist.Background = Brushes.SteelBlue;
                     }
                     #endregion
 
@@ -522,6 +567,7 @@ namespace SJ_Project
                     {
                         if (gwType == GwType.槽高)
                         {
+                            Thread.Sleep(config.FirstTime);
                             ErrorInfo.Text = "测量开始！";
                             flist.Clear();
                             //读取数据
@@ -571,6 +617,7 @@ namespace SJ_Project
                             {
                                 plc.Write("M124", true);
                                 caogaoResult.Text = "NG";
+                                caogaolist.Background = Brushes.Red;
                             }
                         }
                         else
@@ -587,6 +634,7 @@ namespace SJ_Project
                         caogaolist.Items.Refresh();
                         caogaoResult.Text = "";
                         ErrorInfo.Text = "";
+                        caogaolist.Background = Brushes.SteelBlue;
                     }
                     #endregion
 
@@ -614,6 +662,12 @@ namespace SJ_Project
                         caogaolist.Items.Refresh();
                         caogaoResult.Text = "";
                         ErrorInfo.Text = "";
+                        xiaolist.Background = Brushes.SteelBlue;
+                        dalist.Background = Brushes.SteelBlue;
+                        huolist.Background = Brushes.SteelBlue;
+                        caogaolist.Background = Brushes.SteelBlue;
+                        caojlist.Background = Brushes.SteelBlue;
+                        bushlist.Background = Brushes.SteelBlue;
                     }
 
                     remark = true;
@@ -621,7 +675,7 @@ namespace SJ_Project
                 catch (Exception exc)
                 {
                     log.Error("------PLC访问出错------");
-                    log.Error(gwType.ToString()+"  "+row + "  " + exc.Message);
+                    log.Error(gwType.ToString() + "  " + row + "  " + exc.Message);
                     timer.Stop();
                     remark = false;
                 }
@@ -708,5 +762,12 @@ namespace SJ_Project
             dataService.Close();
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var da = dataService.Readtest();
+
+            flist.Add(da);
+            xiaolist.ItemsSource = flist;
+        }
     }
 }

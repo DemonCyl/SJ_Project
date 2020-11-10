@@ -20,7 +20,7 @@ namespace SJ_Project.Services
         //private static string cmd3 = @"DR1030000";
         //private static string cmd4 = @"DR1040000";
         //private static string cmd5 = @"DR1050000";
-        private byte[] cdd0 = { 0x44, 0x52, 0x31, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x0d };
+        private byte[] cdd0 = { 0x44, 0x52, 0x31, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x0D };
         private byte[] cdd1 = { 0x44, 0x52, 0x31, 0x30, 0x31, 0x30, 0x30, 0x30, 0x30, 0x0d };
         private byte[] cdd2 = { 0x44, 0x52, 0x31, 0x30, 0x32, 0x30, 0x30, 0x30, 0x30, 0x0d };
         private byte[] cdd3 = { 0x44, 0x52, 0x31, 0x30, 0x33, 0x30, 0x30, 0x30, 0x30, 0x0d };
@@ -40,7 +40,7 @@ namespace SJ_Project.Services
                 serialPort = new SerialPort(config.PortName, config.BaudRate, Parity.None, 8, StopBits.One);
                 serialPort.DtrEnable = true;
                 serialPort.RtsEnable = true;
-                //serialPort.NewLine = "\r";
+                serialPort.NewLine = "\r";
                 serialPort.ReadTimeout = 5000;
                 mark = OpenPort();
             }
@@ -140,7 +140,7 @@ namespace SJ_Project.Services
             return data;
         }
 
-        public float Readtest(string cmda)
+        public float Readtest()
         {
             float data = 0;
             try
@@ -148,10 +148,11 @@ namespace SJ_Project.Services
 
                 serialPort.DiscardInBuffer();
                 serialPort.DiscardOutBuffer();
-                log.Info("DR1FF0000");
-                //serialPort.WriteLine(cmda);
+                //log.Info("DR1FF0000");
+                //serialPort.WriteLine("DR1FF0000");
                 //var cdd = strToHexByte("DR1FF0000");
                 log.Info(cdd0);
+                log.Info(config.PortName);
                 serialPort.Write(cdd0, 0, cdd0.Length);
 
                 var re = serialPort.ReadLine();

@@ -45,6 +45,7 @@ namespace SJ_Project.Entity
         public float CaoGaoMin { get; set; }
         public int CaoGaoTime { get; set; }
 
+        public int FirstTime { get; set; }
     }
 
 

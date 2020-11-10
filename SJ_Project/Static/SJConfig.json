@@ -27,5 +27,7 @@
 
   "CaoGaoMax": 200,
   "CaoGaoMin": 100,
-  "CaoGaoTime": 200
+  "CaoGaoTime": 200,
+
+  "FirstTime":100
 }
