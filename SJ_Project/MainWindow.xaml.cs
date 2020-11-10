@@ -46,10 +46,16 @@ namespace SJ_Project
         private int row = -1;
         private int sheetSum = 0;
         private int xiaoNo = 0;
+        private bool xiaoMark = true;
         private int daNo = 0;
+        private bool daMark = true;
+        private bool huoMark = true;
         private int caojNo = 0;
+        private bool caojMark = true;
         private int bushNo = 0;
+        private bool bushMark = true;
         private int caogNo = 0;
+        private bool caogMark = true;
         private string fileName = null;
         private IWorkbook workbook = null;
         private string Path = "C:\\Datas\\";
@@ -232,16 +238,79 @@ namespace SJ_Project
                                 caogaolist.Background = Brushes.SteelBlue;
                                 caojlist.Background = Brushes.SteelBlue;
                                 bushlist.Background = Brushes.SteelBlue;
+
                                 flist.Clear();
                             }
                             #endregion
 
                             //Thread.Sleep(config.FirstTime);
                             ErrorInfo.Text = "测量开始！";
-                            //读取数据
-                            var re = dataService.ReadData(gwType);
-                            flist.Add(re);
+                            if (xiaoMark)
+                            {
+                                //读取数据
+                                var re = dataService.ReadData(gwType);
+                                flist.Add(re);
 
+                                // 每次
+                                xiaoMark = (config.XiaoJingMin <= re && re <= config.XiaoJingMax);
+                                if (!xiaoMark)
+                                {
+                                    xiaolist.ItemsSource = null;
+                                    xiaolist.ItemsSource = flist;
+                                    xiaolist.Background = Brushes.Red;
+                                    xiaolist.Items.Refresh();
+
+                                    plc.Write("M120", true);
+                                    xiaoResult.Text = "NG";
+
+                                    workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                                    var sheet = workbook.GetSheetAt(sheetSum - 1);
+                                    using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                                    {
+                                        sheet.CreateRow(row).CreateCell(0).SetCellValue("小径数据");
+                                        row += 1;
+                                        var crow = sheet.CreateRow(row);
+                                        for (int i = 0; i < flist.Count(); i++)
+                                        {
+                                            crow.CreateCell(i + 1).SetCellValue(flist[i]);
+                                        }
+                                        row += 1;
+                                        workbook.Write(fs);
+                                    }
+                                }
+                                else
+                                {
+                                    if (xiaoNo == config.XiaoJingCount)
+                                    {
+                                        xiaolist.ItemsSource = null;
+                                        xiaolist.ItemsSource = flist;
+                                        xiaolist.Items.Refresh();
+
+                                        plc.Write("M110", true);
+                                        gwType = GwType.大径活塞高度;
+                                        xiaoResult.Text = "OK";
+
+                                        workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                                        var sheet = workbook.GetSheetAt(sheetSum - 1);
+                                        using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                                        {
+                                            sheet.CreateRow(row).CreateCell(0).SetCellValue("小径数据");
+                                            row += 1;
+                                            var crow = sheet.CreateRow(row);
+                                            for (int i = 0; i < flist.Count(); i++)
+                                            {
+                                                crow.CreateCell(i + 1).SetCellValue(flist[i]);
+                                            }
+                                            row += 1;
+                                            workbook.Write(fs);
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                ErrorInfo.Text = "前次NG!";
+                            }
 
                             //for (int i = 0; i < 4; i++)
                             //{
@@ -297,7 +366,7 @@ namespace SJ_Project
                         }
                         else
                         {
-                            ErrorInfo.Text = "当前测量不应在此量测位置！";
+                            ErrorInfo.Text = $"当前测量应在 {gwType.ToString()} 量测位置！";
                         }
                     }
 
@@ -311,6 +380,7 @@ namespace SJ_Project
                         ErrorInfo.Text = "";
                         xiaolist.Background = Brushes.SteelBlue;
                         xiaoNo = 0;
+                        xiaoMark = true;
                     }
 
                     #endregion
@@ -321,90 +391,157 @@ namespace SJ_Project
                     {
                         if (gwType == GwType.大径活塞高度)
                         {
-                            Thread.Sleep(config.FirstTime);
-                            ErrorInfo.Text = "测量开始！";
-                            flist.Clear();
-                            flist1.Clear();
-                            //读取数据
-                            for (int i = 0; i < 4; i++)
+                            daNo += 1;
+                            if (daNo == 1)
                             {
+                                flist.Clear();
+                                flist1.Clear();
+                            }
+
+                            //Thread.Sleep(config.FirstTime);
+                            ErrorInfo.Text = "测量开始！";
+                            if (daMark)
+                            {
+                                //读取数据
                                 var re = dataService.ReadData(gwType);
                                 flist.Add(re);
                                 var re1 = dataService.ReadData(GwType.活塞高度);
                                 flist1.Add(re1);
 
-                                if (i != 3)
-                                    Thread.Sleep(config.DaJingHuoSaiTime);
-                            }
-                            // write to excel
-                            workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
-                            var sheet = workbook.GetSheetAt(sheetSum - 1);
-                            using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
-                            {
-                                sheet.CreateRow(row).CreateCell(0).SetCellValue("大径数据");
-                                row += 1;
-                                var crow = sheet.CreateRow(row);
-                                for (int i = 0; i < flist.Count(); i++)
+                                daMark = (config.DaJingMin <= re && re <= config.DaJingMax);
+                                huoMark = (config.HuoSaiMin <= re1 && re1 <= config.HuoSaiMax);
+                                if (!daMark || !huoMark)
                                 {
-                                    crow.CreateCell(i).SetCellValue(flist[i]);
-                                }
-                                row += 1;
+                                    dalist.ItemsSource = null;
+                                    dalist.ItemsSource = flist;
+                                    dalist.Background = daMark ? Brushes.SteelBlue : Brushes.Red;
+                                    dalist.Items.Refresh();
 
-                                sheet.CreateRow(row).CreateCell(0).SetCellValue("活塞高度数据");
-                                row += 1;
-                                var crow1 = sheet.CreateRow(row);
-                                for (int i = 0; i < flist1.Count(); i++)
+                                    huolist.ItemsSource = null;
+                                    huolist.ItemsSource = flist1;
+                                    huolist.Background = huoMark ? Brushes.SteelBlue : Brushes.Red;
+                                    huolist.Items.Refresh();
+
+                                    plc.Write("M121", true);
+                                    daResult.Text = daMark ? "OK" : "NG";
+                                    huoResult.Text = huoMark ? "OK" : "NG";
+
+                                    workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                                    var sheet = workbook.GetSheetAt(sheetSum - 1);
+                                    using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                                    {
+
+
+                                    }
+
+                                }
+                                else
                                 {
-                                    crow.CreateCell(i).SetCellValue(flist1[i]);
-                                }
-                                row += 1;
+                                    if (daNo == config.DaJingHuoSaiCount)
+                                    {
+                                        
 
-                                workbook.Write(fs);
-                            }
+                                        plc.Write("M111", true);
+                                        gwType = GwType.槽径;
+                                        daResult.Text = "OK";
+                                        huoResult.Text = "OK";
 
-                            dalist.ItemsSource = null;
-                            huolist.ItemsSource = null;
-                            dalist.ItemsSource = flist;
-                            huolist.ItemsSource = flist1;
-                            dalist.Items.Refresh();
-                            huolist.Items.Refresh();
-                            bool mark = true;
-                            flist.ForEach(f =>
-                            {
-                                if (mark)
-                                {
-                                    mark = (config.DaJingMin <= f && f <= config.DaJingMax);
-                                }
-                            });
-                            bool mark1 = true;
-                            flist1.ForEach(f =>
-                            {
-                                if (mark1)
-                                {
-                                    mark1 = (config.HuoSaiMin <= f && f <= config.HuoSaiMax);
-                                }
-                            });
+                                        workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                                        var sheet = workbook.GetSheetAt(sheetSum - 1);
+                                        using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                                        {
 
-                            // 回写PLC
-                            if (mark && mark1)
-                            {
-                                plc.Write("M111", true);
-                                gwType = GwType.槽径;
-                                daResult.Text = "OK";
-                                huoResult.Text = "OK";
+                                        }
+                                    }
+                                }
                             }
                             else
                             {
-                                plc.Write("M121", true);
-                                daResult.Text = "NG";
-                                huoResult.Text = "NG";
-                                dalist.Background = Brushes.Red;
-                                huolist.Background = Brushes.Red;
+                                ErrorInfo.Text = "前次NG!";
                             }
+
+                            //flist.Clear();
+                            //flist1.Clear();
+                            ////读取数据
+                            //for (int i = 0; i < 4; i++)
+                            //{
+                            //    var re = dataService.ReadData(gwType);
+                            //    flist.Add(re);
+                            //    var re1 = dataService.ReadData(GwType.活塞高度);
+                            //    flist1.Add(re1);
+
+                            //    if (i != 3)
+                            //        Thread.Sleep(config.DaJingHuoSaiTime);
+                            //}
+                            // write to excel
+                            //workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                            //var sheet = workbook.GetSheetAt(sheetSum - 1);
+                            //using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                            //{
+                            //    sheet.CreateRow(row).CreateCell(0).SetCellValue("大径数据");
+                            //    row += 1;
+                            //    var crow = sheet.CreateRow(row);
+                            //    for (int i = 0; i < flist.Count(); i++)
+                            //    {
+                            //        crow.CreateCell(i).SetCellValue(flist[i]);
+                            //    }
+                            //    row += 1;
+
+                            //    sheet.CreateRow(row).CreateCell(0).SetCellValue("活塞高度数据");
+                            //    row += 1;
+                            //    var crow1 = sheet.CreateRow(row);
+                            //    for (int i = 0; i < flist1.Count(); i++)
+                            //    {
+                            //        crow.CreateCell(i).SetCellValue(flist1[i]);
+                            //    }
+                            //    row += 1;
+
+                            //    workbook.Write(fs);
+                            //}
+
+                            //dalist.ItemsSource = null;
+                            //huolist.ItemsSource = null;
+                            //dalist.ItemsSource = flist;
+                            //huolist.ItemsSource = flist1;
+                            //dalist.Items.Refresh();
+                            //huolist.Items.Refresh();
+                            //bool mark = true;
+                            //flist.ForEach(f =>
+                            //{
+                            //    if (mark)
+                            //    {
+                            //        mark = (config.DaJingMin <= f && f <= config.DaJingMax);
+                            //    }
+                            //});
+                            //bool mark1 = true;
+                            //flist1.ForEach(f =>
+                            //{
+                            //    if (mark1)
+                            //    {
+                            //        mark1 = (config.HuoSaiMin <= f && f <= config.HuoSaiMax);
+                            //    }
+                            //});
+
+                            //// 回写PLC
+                            //if (mark && mark1)
+                            //{
+                            //    plc.Write("M111", true);
+                            //    gwType = GwType.槽径;
+                            //    daResult.Text = "OK";
+                            //    huoResult.Text = "OK";
+                            //}
+                            //else
+                            //{
+                            //    plc.Write("M121", true);
+                            //    daResult.Text = "NG";
+                            //    huoResult.Text = "NG";
+                            //    dalist.Background = Brushes.Red;
+                            //    huolist.Background = Brushes.Red;
+                            //}
                         }
                         else
                         {
-                            ErrorInfo.Text = "当前测量不应在此量测位置！";
+                            ErrorInfo.Text = $"当前测量应在 {gwType.ToString()} 量测位置！";
                         }
                     }
 
@@ -421,6 +558,8 @@ namespace SJ_Project
                         ErrorInfo.Text = "";
                         dalist.Background = Brushes.SteelBlue;
                         huolist.Background = Brushes.SteelBlue;
+                        daNo = 0;
+                        daMark = true;
                     }
                     #endregion
 
@@ -430,62 +569,137 @@ namespace SJ_Project
                     {
                         if (gwType == GwType.槽径)
                         {
-                            Thread.Sleep(config.FirstTime);
-                            ErrorInfo.Text = "测量开始！";
-                            flist.Clear();
-                            //读取数据
-                            for (int i = 0; i < 4; i++)
+                            caojNo += 1;
+                            if (caojNo == 1)
                             {
+                                flist.Clear();
+                            }
+
+                            //Thread.Sleep(config.FirstTime);
+                            ErrorInfo.Text = "测量开始！";
+
+                            if (caojMark)
+                            {
+                                //读取数据
                                 var re = dataService.ReadData(gwType);
                                 flist.Add(re);
-                                if (i != 3)
-                                    Thread.Sleep(config.CaoJingTime);
-                            }
-                            // write to excel
-                            workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
-                            var sheet = workbook.GetSheetAt(sheetSum - 1);
-                            using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
-                            {
-                                sheet.CreateRow(row).CreateCell(0).SetCellValue("槽径数据");
-                                row += 1;
-                                var crow = sheet.CreateRow(row);
-                                for (int i = 0; i < flist.Count(); i++)
-                                {
-                                    crow.CreateCell(i).SetCellValue(flist[i]);
-                                }
-                                row += 1;
-                                workbook.Write(fs);
-                            }
 
-                            caojlist.ItemsSource = null;
-                            caojlist.ItemsSource = flist;
-                            caojlist.Items.Refresh();
-                            bool mark = true;
-                            flist.ForEach(f =>
-                            {
-                                if (mark)
+                                caojMark = (config.CaoJingMin <= re && re <= config.CaoJingMax);
+                                if (!caojMark)
                                 {
-                                    mark = (config.CaoJingMin <= f && f <= config.CaoJingMax);
-                                }
-                            });
+                                    caojlist.ItemsSource = null;
+                                    caojlist.ItemsSource = flist;
+                                    caojlist.Background = Brushes.Red;
+                                    caojlist.Items.Refresh();
 
-                            // 回写PLC
-                            if (mark)
-                            {
-                                plc.Write("M112", true);
-                                gwType = GwType.BUSH;
-                                caojResult.Text = "OK";
+                                    plc.Write("M122", true);
+                                    caojResult.Text = "NG";
+
+                                    workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                                    var sheet = workbook.GetSheetAt(sheetSum - 1);
+                                    using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                                    {
+                                        sheet.CreateRow(row).CreateCell(0).SetCellValue("槽径数据");
+                                        row += 1;
+                                        var crow = sheet.CreateRow(row);
+                                        for (int i = 0; i < flist.Count(); i++)
+                                        {
+                                            crow.CreateCell(i + 1).SetCellValue(flist[i]);
+                                        }
+                                        row += 1;
+                                        workbook.Write(fs);
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (caojNo == config.CaoJingCount)
+                                    {
+                                        caojlist.ItemsSource = null;
+                                        caojlist.ItemsSource = flist;
+                                        caojlist.Items.Refresh();
+
+                                        plc.Write("M112", true);
+                                        gwType = GwType.BUSH;
+                                        caojResult.Text = "OK";
+
+                                        workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                                        var sheet = workbook.GetSheetAt(sheetSum - 1);
+                                        using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                                        {
+                                            sheet.CreateRow(row).CreateCell(0).SetCellValue("槽径数据");
+                                            row += 1;
+                                            var crow = sheet.CreateRow(row);
+                                            for (int i = 0; i < flist.Count(); i++)
+                                            {
+                                                crow.CreateCell(i + 1).SetCellValue(flist[i]);
+                                            }
+                                            row += 1;
+                                            workbook.Write(fs);
+                                        }
+                                    }
+                                }
                             }
                             else
                             {
-                                plc.Write("M122", true);
-                                caojResult.Text = "NG";
-                                caojlist.Background = Brushes.Red;
+                                ErrorInfo.Text = "前次NG!";
                             }
+
+                            //flist.Clear();
+                            //读取数据
+                            //for (int i = 0; i < 4; i++)
+                            //{
+                            //    var re = dataService.ReadData(gwType);
+                            //    flist.Add(re);
+                            //    if (i != 3)
+                            //        Thread.Sleep(config.CaoJingTime);
+                            //}
+                            // write to excel
+                            //workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                            //var sheet = workbook.GetSheetAt(sheetSum - 1);
+                            //using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                            //{
+                            //    sheet.CreateRow(row).CreateCell(0).SetCellValue("槽径数据");
+                            //    row += 1;
+                            //    var crow = sheet.CreateRow(row);
+                            //    for (int i = 0; i < flist.Count(); i++)
+                            //    {
+                            //        crow.CreateCell(i).SetCellValue(flist[i]);
+                            //    }
+                            //    row += 1;
+                            //    workbook.Write(fs);
+                            //}
+
+                            //caojlist.ItemsSource = null;
+                            //caojlist.ItemsSource = flist;
+                            //caojlist.Items.Refresh();
+                            //bool mark = true;
+                            //flist.ForEach(f =>
+                            //{
+                            //    if (mark)
+                            //    {
+                            //        mark = (config.CaoJingMin <= f && f <= config.CaoJingMax);
+                            //    }
+                            //});
+
+                            //// 回写PLC
+                            //if (mark)
+                            //{
+                            //    plc.Write("M112", true);
+                            //    gwType = GwType.BUSH;
+                            //    caojResult.Text = "OK";
+                            //}
+                            //else
+                            //{
+                            //    plc.Write("M122", true);
+                            //    caojResult.Text = "NG";
+                            //    caojlist.Background = Brushes.Red;
+                            //}
                         }
                         else
                         {
-                            ErrorInfo.Text = "当前测量不应在此量测位置！";
+                            ErrorInfo.Text = $"当前测量应在 {gwType.ToString()} 量测位置！";
                         }
                     }
 
@@ -498,6 +712,8 @@ namespace SJ_Project
                         caojResult.Text = "";
                         ErrorInfo.Text = "";
                         caojlist.Background = Brushes.SteelBlue;
+                        caojNo = 0;
+                        caojMark = true;
                     }
                     #endregion
 
@@ -507,62 +723,136 @@ namespace SJ_Project
                     {
                         if (gwType == GwType.BUSH)
                         {
-                            Thread.Sleep(config.FirstTime);
-                            ErrorInfo.Text = "测量开始！";
-                            flist.Clear();
-                            //读取数据
-                            for (int i = 0; i < 8; i++)
+                            bushNo += 1;
+                            if (bushNo == 1)
                             {
+                                flist.Clear();
+                            }
+
+                            //Thread.Sleep(config.FirstTime);
+                            ErrorInfo.Text = "测量开始！";
+                            if (bushMark)
+                            {
+                                //读取数据
                                 var re = dataService.ReadData(gwType);
                                 flist.Add(re);
-                                if (i != 7)
-                                    Thread.Sleep(config.BushTime);
-                            }
-                            // write to excel
-                            workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
-                            var sheet = workbook.GetSheetAt(sheetSum - 1);
-                            using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
-                            {
-                                sheet.CreateRow(row).CreateCell(0).SetCellValue("BUSH数据");
-                                row += 1;
-                                var crow = sheet.CreateRow(row);
-                                for (int i = 0; i < flist.Count(); i++)
-                                {
-                                    crow.CreateCell(i).SetCellValue(flist[i]);
-                                }
-                                row += 1;
-                                workbook.Write(fs);
-                            }
 
-                            bushlist.ItemsSource = null;
-                            bushlist.ItemsSource = flist;
-                            bushlist.Items.Refresh();
-                            bool mark = true;
-                            flist.ForEach(f =>
-                            {
-                                if (mark)
+                                bushMark = (config.BushMin <= re && re <= config.BushMax);
+                                if (!bushMark)
                                 {
-                                    mark = (config.BushMin <= f && f <= config.BushMax);
-                                }
-                            });
+                                    bushlist.ItemsSource = null;
+                                    bushlist.ItemsSource = flist;
+                                    bushlist.Background = Brushes.Red;
+                                    bushlist.Items.Refresh();
 
-                            // 回写PLC
-                            if (mark)
-                            {
-                                plc.Write("M113", true);
-                                gwType = GwType.槽高;
-                                bushResult.Text = "OK";
+                                    plc.Write("M123", true);
+                                    bushResult.Text = "NG";
+
+                                    workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                                    var sheet = workbook.GetSheetAt(sheetSum - 1);
+                                    using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                                    {
+                                        sheet.CreateRow(row).CreateCell(0).SetCellValue("BUSH数据");
+                                        row += 1;
+                                        var crow = sheet.CreateRow(row);
+                                        for (int i = 0; i < flist.Count(); i++)
+                                        {
+                                            crow.CreateCell(i + 1).SetCellValue(flist[i]);
+                                        }
+                                        row += 1;
+                                        workbook.Write(fs);
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (bushNo == config.BushCount)
+                                    {
+                                        bushlist.ItemsSource = null;
+                                        bushlist.ItemsSource = flist;
+                                        bushlist.Items.Refresh();
+
+                                        plc.Write("M113", true);
+                                        gwType = GwType.槽高;
+                                        bushResult.Text = "OK";
+
+                                        workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                                        var sheet = workbook.GetSheetAt(sheetSum - 1);
+                                        using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                                        {
+                                            sheet.CreateRow(row).CreateCell(0).SetCellValue("BUSH数据");
+                                            row += 1;
+                                            var crow = sheet.CreateRow(row);
+                                            for (int i = 0; i < flist.Count(); i++)
+                                            {
+                                                crow.CreateCell(i + 1).SetCellValue(flist[i]);
+                                            }
+                                            row += 1;
+                                            workbook.Write(fs);
+                                        }
+                                    }
+                                }
                             }
                             else
                             {
-                                plc.Write("M123", true);
-                                bushResult.Text = "NG";
-                                bushlist.Background = Brushes.Red;
+                                ErrorInfo.Text = "前次NG!";
                             }
+
+                            //flist.Clear();
+                            //读取数据
+                            //for (int i = 0; i < 8; i++)
+                            //{
+                            //    var re = dataService.ReadData(gwType);
+                            //    flist.Add(re);
+                            //    if (i != 7)
+                            //        Thread.Sleep(config.BushTime);
+                            //}
+                            // write to excel
+                            //workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                            //var sheet = workbook.GetSheetAt(sheetSum - 1);
+                            //using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                            //{
+                            //    sheet.CreateRow(row).CreateCell(0).SetCellValue("BUSH数据");
+                            //    row += 1;
+                            //    var crow = sheet.CreateRow(row);
+                            //    for (int i = 0; i < flist.Count(); i++)
+                            //    {
+                            //        crow.CreateCell(i).SetCellValue(flist[i]);
+                            //    }
+                            //    row += 1;
+                            //    workbook.Write(fs);
+                            //}
+
+                            //bushlist.ItemsSource = null;
+                            //bushlist.ItemsSource = flist;
+                            //bushlist.Items.Refresh();
+                            //bool mark = true;
+                            //flist.ForEach(f =>
+                            //{
+                            //    if (mark)
+                            //    {
+                            //        mark = (config.BushMin <= f && f <= config.BushMax);
+                            //    }
+                            //});
+
+                            //// 回写PLC
+                            //if (mark)
+                            //{
+                            //    plc.Write("M113", true);
+                            //    gwType = GwType.槽高;
+                            //    bushResult.Text = "OK";
+                            //}
+                            //else
+                            //{
+                            //    plc.Write("M123", true);
+                            //    bushResult.Text = "NG";
+                            //    bushlist.Background = Brushes.Red;
+                            //}
                         }
                         else
                         {
-                            ErrorInfo.Text = "当前测量不应在此量测位置！";
+                            ErrorInfo.Text = $"当前测量应在 {gwType.ToString()} 量测位置！";
                         }
                     }
 
@@ -575,6 +865,8 @@ namespace SJ_Project
                         bushResult.Text = "";
                         ErrorInfo.Text = "";
                         bushlist.Background = Brushes.SteelBlue;
+                        bushNo = 0;
+                        bushMark = true;
                     }
                     #endregion
 
@@ -584,62 +876,136 @@ namespace SJ_Project
                     {
                         if (gwType == GwType.槽高)
                         {
-                            Thread.Sleep(config.FirstTime);
-                            ErrorInfo.Text = "测量开始！";
-                            flist.Clear();
-                            //读取数据
-                            for (int i = 0; i < 4; i++)
+                            caogNo += 1;
+                            if (caogNo == 1)
                             {
+                                flist.Clear();
+                            }
+
+                            //Thread.Sleep(config.FirstTime);
+                            ErrorInfo.Text = "测量开始！";
+                            if (caogMark)
+                            {
+                                //读取数据
                                 var re = dataService.ReadData(gwType);
                                 flist.Add(re);
-                                if (i != 3)
-                                    Thread.Sleep(config.CaoGaoTime);
-                            }
-                            // write to excel
-                            workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
-                            var sheet = workbook.GetSheetAt(sheetSum - 1);
-                            using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
-                            {
-                                sheet.CreateRow(row).CreateCell(0).SetCellValue("槽高数据");
-                                row += 1;
-                                var crow = sheet.CreateRow(row);
-                                for (int i = 0; i < flist.Count(); i++)
-                                {
-                                    crow.CreateCell(i).SetCellValue(flist[i]);
-                                }
-                                row += 1;
-                                workbook.Write(fs);
-                            }
 
-                            caogaolist.ItemsSource = null;
-                            caogaolist.ItemsSource = flist;
-                            caogaolist.Items.Refresh();
-                            bool mark = true;
-                            flist.ForEach(f =>
-                            {
-                                if (mark)
+                                caogMark = (config.CaoGaoMin <= re && re <= config.CaoGaoMax);
+                                if (!caogMark)
                                 {
-                                    mark = (config.CaoGaoMin <= f && f <= config.CaoGaoMax);
-                                }
-                            });
+                                    caogaolist.ItemsSource = null;
+                                    caogaolist.ItemsSource = flist;
+                                    caogaolist.Background = Brushes.Red;
+                                    caogaolist.Items.Refresh();
 
-                            // 回写PLC
-                            if (mark)
-                            {
-                                plc.Write("M114", true);
-                                gwType = GwType.小径;
-                                caogaoResult.Text = "OK";
+                                    plc.Write("M124", true);
+                                    caogaoResult.Text = "NG";
+
+                                    workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                                    var sheet = workbook.GetSheetAt(sheetSum - 1);
+                                    using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                                    {
+                                        sheet.CreateRow(row).CreateCell(0).SetCellValue("槽高数据");
+                                        row += 1;
+                                        var crow = sheet.CreateRow(row);
+                                        for (int i = 0; i < flist.Count(); i++)
+                                        {
+                                            crow.CreateCell(i + 1).SetCellValue(flist[i]);
+                                        }
+                                        row += 1;
+                                        workbook.Write(fs);
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (caogNo == config.CaoGaoCount)
+                                    {
+                                        caogaolist.ItemsSource = null;
+                                        caogaolist.ItemsSource = flist;
+                                        caogaolist.Items.Refresh();
+
+                                        plc.Write("M114", true);
+                                        gwType = GwType.小径;
+                                        caogaoResult.Text = "OK";
+
+                                        workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                                        var sheet = workbook.GetSheetAt(sheetSum - 1);
+                                        using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                                        {
+                                            sheet.CreateRow(row).CreateCell(0).SetCellValue("槽高数据");
+                                            row += 1;
+                                            var crow = sheet.CreateRow(row);
+                                            for (int i = 0; i < flist.Count(); i++)
+                                            {
+                                                crow.CreateCell(i + 1).SetCellValue(flist[i]);
+                                            }
+                                            row += 1;
+                                            workbook.Write(fs);
+                                        }
+                                    }
+                                }
                             }
                             else
                             {
-                                plc.Write("M124", true);
-                                caogaoResult.Text = "NG";
-                                caogaolist.Background = Brushes.Red;
+                                ErrorInfo.Text = "前次NG!";
                             }
+
+                            //flist.Clear();
+                            //读取数据
+                            //for (int i = 0; i < 4; i++)
+                            //{
+                            //    var re = dataService.ReadData(gwType);
+                            //    flist.Add(re);
+                            //    if (i != 3)
+                            //        Thread.Sleep(config.CaoGaoTime);
+                            //}
+                            // write to excel
+                            //workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
+                            //var sheet = workbook.GetSheetAt(sheetSum - 1);
+                            //using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+                            //{
+                            //    sheet.CreateRow(row).CreateCell(0).SetCellValue("槽高数据");
+                            //    row += 1;
+                            //    var crow = sheet.CreateRow(row);
+                            //    for (int i = 0; i < flist.Count(); i++)
+                            //    {
+                            //        crow.CreateCell(i).SetCellValue(flist[i]);
+                            //    }
+                            //    row += 1;
+                            //    workbook.Write(fs);
+                            //}
+
+                            //caogaolist.ItemsSource = null;
+                            //caogaolist.ItemsSource = flist;
+                            //caogaolist.Items.Refresh();
+                            //bool mark = true;
+                            //flist.ForEach(f =>
+                            //{
+                            //    if (mark)
+                            //    {
+                            //        mark = (config.CaoGaoMin <= f && f <= config.CaoGaoMax);
+                            //    }
+                            //});
+
+                            //// 回写PLC
+                            //if (mark)
+                            //{
+                            //    plc.Write("M114", true);
+                            //    gwType = GwType.小径;
+                            //    caogaoResult.Text = "OK";
+                            //}
+                            //else
+                            //{
+                            //    plc.Write("M124", true);
+                            //    caogaoResult.Text = "NG";
+                            //    caogaolist.Background = Brushes.Red;
+                            //}
                         }
                         else
                         {
-                            ErrorInfo.Text = "当前测量不应在此量测位置！";
+                            ErrorInfo.Text = $"当前测量应在 {gwType.ToString()} 量测位置！";
                         }
                     }
 
@@ -652,6 +1018,8 @@ namespace SJ_Project
                         caogaoResult.Text = "";
                         ErrorInfo.Text = "";
                         caogaolist.Background = Brushes.SteelBlue;
+                        caogNo = 0;
+                        caogMark = true;
                     }
                     #endregion
 
@@ -786,5 +1154,6 @@ namespace SJ_Project
             flist.Add(da);
             xiaolist.ItemsSource = flist;
         }
+
     }
 }
