@@ -9,10 +9,12 @@
   "XiaoJingMax": 200,
   "XiaoJingMin": 100,
   "XiaoJingTime": 200,
+  "XiaoJingCount": 4,
 
   "DaJingMax": 200,
   "DaJingMin": 100,
   "DaJingHuoSaiTime": 200,
+  "DaJingHuoSaiCount": 4,
 
   "HuoSaiMax": 200,
   "HuoSaiMin": 100,
@@ -20,14 +22,17 @@
   "CaoJingMax": 200,
   "CaoJingMin": 100,
   "CaoJingTime": 200,
+  "CaoJingCount": 4,
 
   "BushMax": 200,
   "BushMin": 100,
   "BushTime": 200,
+  "BushCount": 8,
 
   "CaoGaoMax": 200,
   "CaoGaoMin": 100,
   "CaoGaoTime": 200,
+  "CaoGaoCount": 4,
 
-  "FirstTime":100
+  "FirstTime": 100
 }

@@ -46,6 +46,12 @@ namespace SJ_Project.Entity
         public int CaoGaoTime { get; set; }
 
         public int FirstTime { get; set; }
+
+        public int XiaoJingCount { get; set; }
+        public int DaJingHuoSaiCount { get; set; }
+        public int CaoJingCount { get; set; }
+        public int BushCount { get; set; }
+        public int CaoGaoCount { get; set; }
     }
 
 
