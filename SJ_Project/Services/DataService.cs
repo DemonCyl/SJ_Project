@@ -14,12 +14,12 @@ namespace SJ_Project.Services
         private SerialPort serialPort;
         private ConfigData config;
         private ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private static string cmd0 = @"DR1000000";
-        private static string cmd1 = @"DR1010000";
-        private static string cmd2 = @"DR1020000";
-        private static string cmd3 = @"DR1030000";
-        private static string cmd4 = @"DR1040000";
-        private static string cmd5 = @"DR1050000";
+        //private static string cmd0 = @"DR1000000";
+        //private static string cmd1 = @"DR1010000";
+        //private static string cmd2 = @"DR1020000";
+        //private static string cmd3 = @"DR1030000";
+        //private static string cmd4 = @"DR1040000";
+        //private static string cmd5 = @"DR1050000";
         private byte[] cdd0 = { 0x44, 0x52, 0x31, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x0d };
         private byte[] cdd1 = { 0x44, 0x52, 0x31, 0x30, 0x31, 0x30, 0x30, 0x30, 0x30, 0x0d };
         private byte[] cdd2 = { 0x44, 0x52, 0x31, 0x30, 0x32, 0x30, 0x30, 0x30, 0x30, 0x0d };
@@ -40,8 +40,8 @@ namespace SJ_Project.Services
                 serialPort = new SerialPort(config.PortName, config.BaudRate, Parity.None, 8, StopBits.One);
                 serialPort.DtrEnable = true;
                 serialPort.RtsEnable = true;
-                serialPort.NewLine = "\r";
-                serialPort.ReadTimeout = 3000;
+                //serialPort.NewLine = "\r";
+                serialPort.ReadTimeout = 5000;
                 mark = OpenPort();
             }
             return mark;
@@ -116,8 +116,8 @@ namespace SJ_Project.Services
                 }
                 catch (Exception ex)
                 {
-                    log.Error(ex.Message);
-                    throw new Exception(ex.Message);
+                    log.Error(cmd[4] + "  " + cmd.Length + "  " + ex.Message);
+                    throw new Exception(cmd[0]+"  "+cmd.Length+"  "+ex.Message);
                 }
             }
             return data;
@@ -133,7 +133,7 @@ namespace SJ_Project.Services
             float data = 0;
             // 00.000E-03  e.g. 00 000 -03
 
-
+            log.Info(strData);
             var str1 = strData.Substring(7, 12);
             data = float.Parse(str1);
 

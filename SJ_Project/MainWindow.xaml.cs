@@ -75,44 +75,59 @@ namespace SJ_Project
             connect = plc.ConnectServer();
 
             #region PLC连接定时器
-            timer1 = new System.Windows.Threading.DispatcherTimer();
-            timer1.Tick += new EventHandler(ThreadCheck);
-            timer1.Interval = new TimeSpan(0, 0, 0, 5);
-            timer1.Start();
+            //timer1 = new System.Windows.Threading.DispatcherTimer();
+            //timer1.Tick += new EventHandler(ThreadCheck);
+            //timer1.Interval = new TimeSpan(0, 0, 0, 5);
+            //timer1.Start();
             #endregion
 
             //CycleDataRead();
 
-            //flist.Add(dataService.TransformData("DT10000-0000114.782M"));
-            //flist.Add(dataService.TransformData("DT10000-0000113.28M"));
-            //flist.Add(dataService.TransformData("DT10000+0000234.78M"));
-            //flist.Add(dataService.TransformData("DT10000+0000414.78M"));
-            //xiaolist.ItemsSource = flist;
-            //if (row == 1 || row > 40000)
+            //try
             //{
-            //    if (!System.IO.Directory.Exists(Path))
-            //        System.IO.Directory.CreateDirectory(Path);
-            //    if (sheetSum == 0 || sheetSum > 250)
+            //    dataService.ReadData(GwType.小径);
+            //    flist.Add(dataService.TransformData("DT10000-0000114.782M"));
+            //    flist.Add(dataService.TransformData("DT10000-0000113.282M"));
+            //    flist.Add(dataService.TransformData("DT10000+0000234.782M"));
+            //    flist.Add(dataService.TransformData("DT10000+0000414.782M"));
+            //    xiaolist.ItemsSource = flist;
+            //}
+            //catch (Exception ex)
+            //{
+            //    log.Error(ex.Message);
+            //}
+            //try
+            //{
+            //    if (row == 0 || row > 40000)
             //    {
-            //        fileName = DateTime.Now.ToString("yyyyMMdd-HH") + ".xls";
-            //        workbook = new HSSFWorkbook();
-            //        var sheet = workbook.CreateSheet("Sheet" + sheetSum);
-            //        using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+            //        if (!System.IO.Directory.Exists(Path))
+            //            System.IO.Directory.CreateDirectory(Path);
+            //        if (sheetSum == 0 || sheetSum > 250)
             //        {
-            //            workbook.Write(fs);  //创建test.xls文件。
+            //            fileName = DateTime.Now.ToString("yyyyMMdd-HH") + ".xls";
+            //            workbook = new HSSFWorkbook();
+            //            var sheet = workbook.CreateSheet("Sheet" + sheetSum);
+            //            var sheeqt = workbook.GetSheetAt(sheetSum - 1);
+            //            using (var fs = new FileStream(Path + "\\" + fileName, FileMode.OpenOrCreate))
+            //            {
+            //                workbook.Write(fs);  //创建test.xls文件。
+            //            }
+            //            sheetSum = 1;
             //        }
-            //        sheetSum = 1;
-            //    }
-            //    else
-            //    {
-            //        workbook = new HSSFWorkbook(File.OpenRead(Path + "\\2020-11-03-16.xls"));
-            //        var sheet = workbook.CreateSheet("Sheet" + sheetSum);
-            //        using (var fs = new FileStream(Path + "\\2020-11-03-16.xls", FileMode.OpenOrCreate))
+            //        else
             //        {
-            //            workbook.Write(fs);  //创建test.xls文件。
+            //            workbook = new HSSFWorkbook(File.OpenRead(Path + "\\2020-11-03-16.xls"));
+            //            var sheet = workbook.CreateSheet("Sheet" + sheetSum);
+            //            using (var fs = new FileStream(Path + "\\2020-11-03-16.xls", FileMode.OpenOrCreate))
+            //            {
+            //                workbook.Write(fs);  //创建test.xls文件。
+            //            }
+            //            sheetSum += 1;
             //        }
-            //        sheetSum += 1;
             //    }
+            //}catch(Exception ex)
+            //{
+            //    log.Error(ex.Message);
             //}
         }
 
@@ -187,8 +202,9 @@ namespace SJ_Project
                                 var re = dataService.ReadData(gwType);
                                 flist.Add(re);
                                 if (i != 3)
-                                    Thread.Sleep(200);
+                                    Thread.Sleep(config.XiaoJingTime);
                             }
+                            log.Info(flist.Count()+"  "+flist.First());
                             // write to excel
                             workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
                             var sheet = workbook.GetSheetAt(sheetSum - 1);
@@ -205,7 +221,9 @@ namespace SJ_Project
                                 workbook.Write(fs);
                             }
 
+                            xiaolist.ItemsSource = null;
                             xiaolist.ItemsSource = flist;
+                            xiaolist.Items.Refresh();
                             bool mark = true;
                             flist.ForEach(f =>
                             {
@@ -239,6 +257,7 @@ namespace SJ_Project
                     {
                         // clear
                         xiaolist.ItemsSource = null;
+                        xiaolist.Items.Refresh();
                         xiaoResult.Text = "";
                         ErrorInfo.Text = "";
                     }
@@ -263,7 +282,7 @@ namespace SJ_Project
                                 flist1.Add(re1);
 
                                 if (i != 3)
-                                    Thread.Sleep(200);
+                                    Thread.Sleep(config.DaJingHuoSaiTime);
                             }
                             // write to excel
                             workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
@@ -291,8 +310,12 @@ namespace SJ_Project
                                 workbook.Write(fs);
                             }
 
+                            dalist.ItemsSource = null;
+                            huolist.ItemsSource = null;
                             dalist.ItemsSource = flist;
                             huolist.ItemsSource = flist1;
+                            dalist.Items.Refresh();
+                            huolist.Items.Refresh();
                             bool mark = true;
                             flist.ForEach(f =>
                             {
@@ -336,7 +359,11 @@ namespace SJ_Project
                     {
                         // clear
                         dalist.ItemsSource = null;
+                        dalist.Items.Refresh();
                         daResult.Text = "";
+                        huolist.ItemsSource = null;
+                        huolist.Items.Refresh();
+                        huoResult.Text = "";
                         ErrorInfo.Text = "";
                     }
                     #endregion
@@ -355,7 +382,7 @@ namespace SJ_Project
                                 var re = dataService.ReadData(gwType);
                                 flist.Add(re);
                                 if (i != 3)
-                                    Thread.Sleep(200);
+                                    Thread.Sleep(config.CaoJingTime);
                             }
                             // write to excel
                             workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
@@ -373,7 +400,9 @@ namespace SJ_Project
                                 workbook.Write(fs);
                             }
 
+                            caojlist.ItemsSource = null;
                             caojlist.ItemsSource = flist;
+                            caojlist.Items.Refresh();
                             bool mark = true;
                             flist.ForEach(f =>
                             {
@@ -407,6 +436,7 @@ namespace SJ_Project
                     {
                         // clear
                         caojlist.ItemsSource = null;
+                        caojlist.Items.Refresh();
                         caojResult.Text = "";
                         ErrorInfo.Text = "";
                     }
@@ -426,7 +456,7 @@ namespace SJ_Project
                                 var re = dataService.ReadData(gwType);
                                 flist.Add(re);
                                 if (i != 7)
-                                    Thread.Sleep(200);
+                                    Thread.Sleep(config.BushTime);
                             }
                             // write to excel
                             workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
@@ -444,7 +474,9 @@ namespace SJ_Project
                                 workbook.Write(fs);
                             }
 
+                            bushlist.ItemsSource = null;
                             bushlist.ItemsSource = flist;
+                            bushlist.Items.Refresh();
                             bool mark = true;
                             flist.ForEach(f =>
                             {
@@ -478,6 +510,7 @@ namespace SJ_Project
                     {
                         // clear
                         bushlist.ItemsSource = null;
+                        bushlist.Items.Refresh();
                         bushResult.Text = "";
                         ErrorInfo.Text = "";
                     }
@@ -497,7 +530,7 @@ namespace SJ_Project
                                 var re = dataService.ReadData(gwType);
                                 flist.Add(re);
                                 if (i != 3)
-                                    Thread.Sleep(200);
+                                    Thread.Sleep(config.CaoGaoTime);
                             }
                             // write to excel
                             workbook = new HSSFWorkbook(File.OpenRead(Path + "\\" + fileName));
@@ -515,7 +548,9 @@ namespace SJ_Project
                                 workbook.Write(fs);
                             }
 
+                            caogaolist.ItemsSource = null;
                             caogaolist.ItemsSource = flist;
+                            caogaolist.Items.Refresh();
                             bool mark = true;
                             flist.ForEach(f =>
                             {
@@ -549,6 +584,7 @@ namespace SJ_Project
                     {
                         // clear
                         caogaolist.ItemsSource = null;
+                        caogaolist.Items.Refresh();
                         caogaoResult.Text = "";
                         ErrorInfo.Text = "";
                     }
@@ -560,16 +596,22 @@ namespace SJ_Project
                     {
                         gwType = GwType.小径;
                         xiaolist.ItemsSource = null;
+                        xiaolist.Items.Refresh();
                         xiaoResult.Text = "";
                         dalist.ItemsSource = null;
+                        dalist.Items.Refresh();
                         daResult.Text = "";
                         huolist.ItemsSource = null;
+                        huolist.Items.Refresh();
                         huoResult.Text = "";
                         caojlist.ItemsSource = null;
+                        caojlist.Items.Refresh();
                         caojResult.Text = "";
                         bushlist.ItemsSource = null;
+                        bushlist.Items.Refresh();
                         bushResult.Text = "";
                         caogaolist.ItemsSource = null;
+                        caogaolist.Items.Refresh();
                         caogaoResult.Text = "";
                         ErrorInfo.Text = "";
                     }
@@ -579,7 +621,7 @@ namespace SJ_Project
                 catch (Exception exc)
                 {
                     log.Error("------PLC访问出错------");
-                    log.Error(exc.Message);
+                    log.Error(gwType.ToString()+"  "+row + "  " + exc.Message);
                     timer.Stop();
                     remark = false;
                 }

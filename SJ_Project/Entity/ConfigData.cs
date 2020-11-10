@@ -24,21 +24,27 @@ namespace SJ_Project.Entity
 
         public float XiaoJingMax { get; set; }
         public float XiaoJingMin { get; set; }
+        public int XiaoJingTime { get; set; }
 
         public float DaJingMax { get; set; }
         public float DaJingMin { get; set; }
+        public int DaJingHuoSaiTime { get; set; }
 
         public float HuoSaiMax { get; set; }
         public float HuoSaiMin { get; set; }
 
         public float CaoJingMax { get; set; }
         public float CaoJingMin { get; set; }
+        public int CaoJingTime { get; set; }
 
         public float BushMax { get; set; }
         public float BushMin { get; set; }
+        public int BushTime { get; set; }
 
         public float CaoGaoMax { get; set; }
         public float CaoGaoMin { get; set; }
+        public int CaoGaoTime { get; set; }
+
     }
 
 
