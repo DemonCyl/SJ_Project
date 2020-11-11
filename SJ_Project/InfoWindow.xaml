@@ -1,0 +1,17 @@
+﻿<Window x:Class="SJ_Project.InfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SJ_Project"
+        mc:Ignorable="d"
+        Title="InfoWindow" Height="450" Width="800">
+    <Grid Background="SteelBlue">
+        <TextBlock x:Name="PortSta_Copy1" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
+                    TextWrapping="Wrap" Text="不良品信息：" FontSize="30"  VerticalAlignment="Center" Height="45" Width="223" Canvas.Left="91" Canvas.Top="16" Margin="26,21,543,353"/>
+        <ListBox x:Name="Nglist" HorizontalAlignment="Left"   Height="258" VerticalAlignment="Top" Background="Red" BorderThickness="0" FontSize="22"
+                         Width="523" Canvas.Left="703" Canvas.Top="157" Margin="132,71,0,0"/>
+        <TextBlock x:Name="NgName" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Center"
+            TextWrapping="Wrap" Text="" FontSize="30"  VerticalAlignment="Center" Height="45" Width="292" Margin="273,21,227,353"/>
+    </Grid>
+</Window>

@@ -133,7 +133,7 @@ namespace SJ_Project.Services
             float data = 0;
             // 00.000E-03  e.g. 00 000 -03
 
-            log.Info(strData);
+            //log.Info(strData);
             var str1 = strData.Substring(7, 12);
             data = float.Parse(str1);
 

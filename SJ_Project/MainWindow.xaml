@@ -25,7 +25,7 @@
                             <GradientStop Color="White" Offset="0"/>
                         </LinearGradientBrush>
                     </Border.BorderBrush>
-                    <Button Content="Button" Visibility="Hidden" HorizontalAlignment="Left" Height="26" Margin="244,21,0,0" VerticalAlignment="Top" Width="78" Click="Button_Click"/>
+                    
 
                 </Border>
                 <Border VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="0" BorderThickness="2" Height="318" Width="139" Canvas.Top="97" Canvas.Left="701">
@@ -146,6 +146,7 @@
                     TextWrapping="Wrap" Text="结果" FontSize="17"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="438" Canvas.Top="361"/>
                 <TextBlock x:Name="huoResult" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
                     TextWrapping="Wrap" Text="" FontSize="17"  VerticalAlignment="Center" Height="28" Width="72" Canvas.Left="487" Canvas.Top="361"/>
+                <Button Content="Button" Visibility="Hidden" HorizontalAlignment="Left" Height="26" Margin="244,21,0,0" VerticalAlignment="Top" Width="78" Click="Button_Click"/>
             </Canvas>
         </Viewbox>
     </Grid>
