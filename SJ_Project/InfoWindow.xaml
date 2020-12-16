@@ -7,11 +7,15 @@
         mc:Ignorable="d"
         Title="InfoWindow" Height="450" Width="800">
     <Grid Background="SteelBlue">
-        <TextBlock x:Name="PortSta_Copy1" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
-                    TextWrapping="Wrap" Text="不良品信息：" FontSize="30"  VerticalAlignment="Center" Height="45" Width="223" Canvas.Left="91" Canvas.Top="16" Margin="26,21,543,353"/>
-        <ListBox x:Name="Nglist" HorizontalAlignment="Left"   Height="258" VerticalAlignment="Top" Background="Red" BorderThickness="0" FontSize="22"
-                         Width="523" Canvas.Left="703" Canvas.Top="157" Margin="132,71,0,0"/>
-        <TextBlock x:Name="NgName" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Center"
-            TextWrapping="Wrap" Text="" FontSize="30"  VerticalAlignment="Center" Height="45" Width="292" Margin="273,21,227,353"/>
+        <Viewbox VerticalAlignment="Top" >
+            <Canvas x:Name="Canvas1" Width="840" Height="450">
+                <TextBlock x:Name="PortSta_Copy1" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
+                    TextWrapping="Wrap" Text="不良品信息：" FontSize="50"  VerticalAlignment="Center" Height="76" Width="318" Canvas.Left="22" Canvas.Top="37"/>
+                <ListBox x:Name="Nglist" HorizontalAlignment="Left"   Height="258" VerticalAlignment="Top" Background="Red" BorderThickness="0" FontSize="40"
+                    Width="795" Canvas.Left="22" Canvas.Top="129"/>
+                <TextBlock x:Name="NgName" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Center"
+                    TextWrapping="Wrap" Text="" FontSize="50"  VerticalAlignment="Center" Height="76" Width="446" Canvas.Left="345" Canvas.Top="37"/>
+            </Canvas>
+        </Viewbox>
     </Grid>
 </Window>

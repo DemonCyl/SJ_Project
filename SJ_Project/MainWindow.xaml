@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
         xmlns:local="clr-namespace:SJ_Project"
         mc:Ignorable="d"
         Closing="Window_Closing"
@@ -18,6 +19,7 @@
                             </LinearGradientBrush.GradientStops>
                         </LinearGradientBrush>
                     </Border.BorderBrush>
+                    <Button Content="Button" HorizontalAlignment="Left" Height="17" Margin="53,17,0,0" VerticalAlignment="Top" Width="65" Click="Button_Click_1" Visibility="Hidden"/>
                 </Border>
                 <Border VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="0" BorderThickness="2" Height="59" Width="840">
                     <Border.BorderBrush>
@@ -25,7 +27,7 @@
                             <GradientStop Color="White" Offset="0"/>
                         </LinearGradientBrush>
                     </Border.BorderBrush>
-                    
+
 
                 </Border>
                 <Border VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="0" BorderThickness="2" Height="318" Width="139" Canvas.Top="97" Canvas.Left="701">
@@ -108,45 +110,108 @@
                 <TextBlock x:Name="PortSta_Copy6" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
                     TextWrapping="Wrap" Text="槽高" FontSize="18"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="46" Canvas.Top="108"/>
 
-                <ListBox x:Name="xiaolist" HorizontalAlignment="Left"   Height="182" VerticalAlignment="Top" Background="SteelBlue" BorderThickness="0"
-                         Width="135" Canvas.Left="703" Canvas.Top="157"/>
+                <ListBox x:Name="xiaolist" HorizontalAlignment="Left"   Height="150" VerticalAlignment="Top" Background="SteelBlue" BorderThickness="0"
+                         Width="135" Canvas.Left="703" Canvas.Top="189"/>
                 <TextBlock x:Name="PortSta_Copy7" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
-                    TextWrapping="Wrap" Text="结果" FontSize="17"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="707" Canvas.Top="361"/>
+                    TextWrapping="Wrap" Text="结果" FontSize="17"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="707" Canvas.Top="347"/>
                 <TextBlock x:Name="xiaoResult" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
-                    TextWrapping="Wrap" Text="" FontSize="17"  VerticalAlignment="Center" Height="28" Width="72" Canvas.Left="758" Canvas.Top="361"/>
-                <ListBox x:Name="caogaolist" HorizontalAlignment="Left"  Height="182" VerticalAlignment="Top" Background="SteelBlue" BorderThickness="0"
-                    Width="138" Canvas.Left="5" Canvas.Top="157"/>
+                    TextWrapping="Wrap" Text="" FontSize="17"  VerticalAlignment="Center" Height="28" Width="72" Canvas.Left="758" Canvas.Top="347"/>
+                <ListBox x:Name="caogaolist" HorizontalAlignment="Left"  Height="150" VerticalAlignment="Top" Background="SteelBlue" BorderThickness="0"
+                    Width="138" Canvas.Left="5" Canvas.Top="189"/>
                 <TextBlock x:Name="PortSta_Copy8" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
-                    TextWrapping="Wrap" Text="结果" FontSize="17"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="15" Canvas.Top="361"/>
+                    TextWrapping="Wrap" Text="结果" FontSize="17"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="15" Canvas.Top="347"/>
                 <TextBlock x:Name="caogaoResult" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
-                    TextWrapping="Wrap" Text="" FontSize="17"  VerticalAlignment="Center" Height="28" Width="72" Canvas.Left="67" Canvas.Top="361"/>
-                <ListBox x:Name="bushlist" HorizontalAlignment="Left"  Height="182" VerticalAlignment="Top" Background="SteelBlue" BorderThickness="0"
-                    Width="132" Canvas.Left="148" Canvas.Top="157"/>
+                    TextWrapping="Wrap" Text="" FontSize="17"  VerticalAlignment="Center" Height="28" Width="72" Canvas.Left="67" Canvas.Top="347"/>
+                <ListBox x:Name="bushlist" HorizontalAlignment="Left"  Height="150" VerticalAlignment="Top" Background="SteelBlue" BorderThickness="0"
+                    Width="137" Canvas.Left="148" Canvas.Top="189"/>
                 <TextBlock x:Name="PortSta_Copy9" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
-                    TextWrapping="Wrap" Text="结果" FontSize="17"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="148" Canvas.Top="361"/>
+                    TextWrapping="Wrap" Text="结果" FontSize="17"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="148" Canvas.Top="347"/>
                 <TextBlock x:Name="bushResult" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
-                    TextWrapping="Wrap" Text="" FontSize="17"  VerticalAlignment="Center" Height="28" Width="72" Canvas.Left="209" Canvas.Top="361"/>
-                <ListBox x:Name="caojlist" HorizontalAlignment="Left"  Height="182" VerticalAlignment="Top" Background="SteelBlue" BorderThickness="0"
-                    Width="139" Canvas.Left="287" Canvas.Top="157"/>
+                    TextWrapping="Wrap" Text="" FontSize="17"  VerticalAlignment="Center" Height="28" Width="72" Canvas.Left="209" Canvas.Top="347"/>
+                <ListBox x:Name="caojlist" HorizontalAlignment="Left"  Height="150" VerticalAlignment="Top" Background="SteelBlue" BorderThickness="0"
+                    Width="139" Canvas.Left="287" Canvas.Top="189"/>
                 <TextBlock x:Name="PortSta_Copy10" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
-                    TextWrapping="Wrap" Text="结果" FontSize="17"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="290" Canvas.Top="361"/>
+                    TextWrapping="Wrap" Text="结果" FontSize="17"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="290" Canvas.Top="347"/>
                 <TextBlock x:Name="caojResult" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
-                    TextWrapping="Wrap" Text="" FontSize="17"  VerticalAlignment="Center" Height="28" Width="72" Canvas.Left="353" Canvas.Top="361"/>
-                <ListBox x:Name="dalist" HorizontalAlignment="Left"  Height="182" VerticalAlignment="Top" Background="SteelBlue" BorderThickness="0"
-                    Width="134" Canvas.Left="566" Canvas.Top="157"/>
+                    TextWrapping="Wrap" Text="" FontSize="17"  VerticalAlignment="Center" Height="28" Width="72" Canvas.Left="353" Canvas.Top="347"/>
+                <ListBox x:Name="dalist" HorizontalAlignment="Left"  Height="150" VerticalAlignment="Top" Background="SteelBlue" BorderThickness="0"
+                    Width="134" Canvas.Left="566" Canvas.Top="189"/>
                 <TextBlock x:Name="PortSta_Copy11" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
-                    TextWrapping="Wrap" Text="结果" FontSize="17"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="574" Canvas.Top="361"/>
+                    TextWrapping="Wrap" Text="结果" FontSize="17"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="574" Canvas.Top="347"/>
                 <TextBlock x:Name="daResult" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
-                    TextWrapping="Wrap" Text="" FontSize="17"  VerticalAlignment="Center" Height="28" Width="72" Canvas.Left="623" Canvas.Top="361"/>
+                    TextWrapping="Wrap" Text="" FontSize="17"  VerticalAlignment="Center" Height="28" Width="72" Canvas.Left="623" Canvas.Top="347"/>
                 <TextBlock x:Name="PortSta_Copy12" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
                     TextWrapping="Wrap" Text="活塞高度" FontSize="18"  VerticalAlignment="Center" Height="28" Width="80" Canvas.Left="454" Canvas.Top="108"/>
-                <ListBox x:Name="huolist" HorizontalAlignment="Left"  Height="182" VerticalAlignment="Top" Background="SteelBlue" BorderThickness="0"
-                    Width="133" Canvas.Left="431" Canvas.Top="157"/>
+                <ListBox x:Name="huolist" HorizontalAlignment="Left"  Height="150" VerticalAlignment="Top" Background="SteelBlue" BorderThickness="0"
+                    Width="133" Canvas.Left="431" Canvas.Top="189"/>
                 <TextBlock x:Name="PortSta_Copy13" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
-                    TextWrapping="Wrap" Text="结果" FontSize="17"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="438" Canvas.Top="361"/>
+                    TextWrapping="Wrap" Text="结果" FontSize="17"  VerticalAlignment="Center" Height="28" Width="41" Canvas.Left="438" Canvas.Top="347"/>
                 <TextBlock x:Name="huoResult" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
-                    TextWrapping="Wrap" Text="" FontSize="17"  VerticalAlignment="Center" Height="28" Width="72" Canvas.Left="487" Canvas.Top="361"/>
+                    TextWrapping="Wrap" Text="" FontSize="17"  VerticalAlignment="Center" Height="28" Width="72" Canvas.Left="487" Canvas.Top="347"/>
+                
                 <Button Content="Button" Visibility="Hidden" HorizontalAlignment="Left" Height="26" Margin="244,21,0,0" VerticalAlignment="Top" Width="78" Click="Button_Click"/>
+                
+                <TextBlock x:Name="PortSta_Copy14" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
+                    TextWrapping="Wrap" Text="规格:" FontSize="15"  VerticalAlignment="Center" Height="19" Width="40" Canvas.Left="703" Canvas.Top="141" RenderTransformOrigin="-0.272,1.815"/>
+                <TextBlock x:Name="xiaomax" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
+                    TextWrapping="Wrap" Text="" FontSize="15"  VerticalAlignment="Center" Height="19" Width="89" Canvas.Left="744" Canvas.Top="141"/>
+                <TextBlock x:Name="xiaomin" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
+                    TextWrapping="Wrap" Text="" FontSize="15"  VerticalAlignment="Center" Height="19" Width="89" Canvas.Left="744" Canvas.Top="165"/>
+                <TextBlock x:Name="PortSta_Copy15" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
+                    TextWrapping="Wrap" Text="规格:" FontSize="15"  VerticalAlignment="Center" Height="19" Width="40" Canvas.Left="567" Canvas.Top="141" RenderTransformOrigin="-0.272,1.815"/>
+                <TextBlock x:Name="damax" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
+                    TextWrapping="Wrap" Text="" FontSize="15"  VerticalAlignment="Center" Height="19" Width="89" Canvas.Left="607" Canvas.Top="141"/>
+                <TextBlock x:Name="damin" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
+                    TextWrapping="Wrap" Text="" FontSize="15"  VerticalAlignment="Center" Height="19" Width="89" Canvas.Left="607" Canvas.Top="165"/>
+                <TextBlock x:Name="PortSta_Copy16" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
+                    TextWrapping="Wrap" Text="规格:" FontSize="15"  VerticalAlignment="Center" Height="19" Width="40" Canvas.Left="430" Canvas.Top="141" RenderTransformOrigin="-0.272,1.815"/>
+                <TextBlock x:Name="huomax" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
+                    TextWrapping="Wrap" Text="" FontSize="15"  VerticalAlignment="Center" Height="19" Width="89" Canvas.Left="470" Canvas.Top="141"/>
+                <TextBlock x:Name="huomin" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
+                    TextWrapping="Wrap" Text="" FontSize="15"  VerticalAlignment="Center" Height="19" Width="89" Canvas.Left="470" Canvas.Top="165"/>
+                <TextBlock x:Name="PortSta_Copy17" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
+                    TextWrapping="Wrap" Text="规格:" FontSize="15"  VerticalAlignment="Center" Height="19" Width="40" Canvas.Left="288" Canvas.Top="141" RenderTransformOrigin="-0.272,1.815"/>
+                <TextBlock x:Name="cjmax" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
+                    TextWrapping="Wrap" Text="" FontSize="15"  VerticalAlignment="Center" Height="19" Width="96" Canvas.Left="328" Canvas.Top="141"/>
+                <TextBlock x:Name="cjmin" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
+                    TextWrapping="Wrap" Text="" FontSize="15"  VerticalAlignment="Center" Height="19" Width="96" Canvas.Left="328" Canvas.Top="165"/>
+                <TextBlock x:Name="PortSta_Copy18" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
+                    TextWrapping="Wrap" Text="规格:" FontSize="15"  VerticalAlignment="Center" Height="19" Width="40" Canvas.Left="145" Canvas.Top="141" RenderTransformOrigin="-0.272,1.815"/>
+                <TextBlock x:Name="bushmax" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
+                    TextWrapping="Wrap" Text="" FontSize="15"  VerticalAlignment="Center" Height="19" Width="95" Canvas.Left="185" Canvas.Top="141"/>
+                <TextBlock x:Name="bushmin" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
+                    TextWrapping="Wrap" Text="" FontSize="15"  VerticalAlignment="Center" Height="19" Width="95" Canvas.Left="185" Canvas.Top="165"/>
+                <TextBlock x:Name="PortSta_Copy19" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Right"
+                    TextWrapping="Wrap" Text="规格:" FontSize="15"  VerticalAlignment="Center" Height="19" Width="40" Canvas.Left="2" Canvas.Top="141" RenderTransformOrigin="-0.272,1.815"/>
+                <TextBlock x:Name="cgmax" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
+                    TextWrapping="Wrap" Text="" FontSize="15"  VerticalAlignment="Center" Height="19" Width="97" Canvas.Left="42" Canvas.Top="141"/>
+                <TextBlock x:Name="cgmin" HorizontalAlignment="Center" Foreground="#F0E68C" FontFamily="Microsoft Yahei" TextAlignment="Left"
+                    TextWrapping="Wrap" Text="" FontSize="15"  VerticalAlignment="Center" Height="19" Width="97" Canvas.Left="42" Canvas.Top="165"/>
+
+                <Button  Height="30" Width="112" Content="标准件模式" pu:ButtonHelper.ClickStyle="Sink" FontFamily="Microsoft Yahei" Background="Yellow" FontSize="19" Foreground="Black"
+                    pu:ButtonHelper.HoverBrush="#FF6000" pu:ButtonHelper.CornerRadius="12" Canvas.Left="715" Canvas.Top="378" Click="Button1_Click" Visibility="Visible" x:Name="button1"/>
+                <Button  Height="30" Width="112" Content="标准件模式" pu:ButtonHelper.ClickStyle="Sink" FontFamily="Microsoft Yahei" Background="Yellow" FontSize="19" Foreground="Black"
+                    pu:ButtonHelper.HoverBrush="#FF6000" pu:ButtonHelper.CornerRadius="12" Canvas.Left="579" Canvas.Top="378" Click="Button2_Click" Visibility="Visible" x:Name="button2"/>
+                <Button  Height="30" Width="112" Content="标准件模式" pu:ButtonHelper.ClickStyle="Sink" FontFamily="Microsoft Yahei" Background="Yellow" FontSize="19" Foreground="Black"
+                    pu:ButtonHelper.HoverBrush="#FF6000" pu:ButtonHelper.CornerRadius="12" Canvas.Left="440" Canvas.Top="378" Click="Button3_Click" Visibility="Visible" x:Name="button3"/>
+                <Button  Height="30" Width="112" Content="标准件模式" pu:ButtonHelper.ClickStyle="Sink" FontFamily="Microsoft Yahei" Background="Yellow" FontSize="19" Foreground="Black"
+                    pu:ButtonHelper.HoverBrush="#FF6000" pu:ButtonHelper.CornerRadius="12" Canvas.Left="301" Canvas.Top="378" Click="Button4_Click" Visibility="Visible" x:Name="button4"/>
+                <Button  Height="30" Width="112" Content="标准件模式" pu:ButtonHelper.ClickStyle="Sink" FontFamily="Microsoft Yahei" Background="Yellow" FontSize="19" Foreground="Black"
+                    pu:ButtonHelper.HoverBrush="#FF6000" pu:ButtonHelper.CornerRadius="12" Canvas.Left="152" Canvas.Top="378" Click="Button5_Click" Visibility="Visible" x:Name="button5"/>
+                <Button  Height="30" Width="112" Content="标准件模式" pu:ButtonHelper.ClickStyle="Sink" FontFamily="Microsoft Yahei" Background="Yellow" FontSize="19" Foreground="Black"
+                    pu:ButtonHelper.HoverBrush="#FF6000" pu:ButtonHelper.CornerRadius="12" Canvas.Left="15" Canvas.Top="378" Click="Button6_Click" Visibility="Visible" x:Name="button6"/>
+                <Button  Height="30" Width="112" Content="取消" pu:ButtonHelper.ClickStyle="Sink" FontFamily="Microsoft Yahei" Background="Yellow" FontSize="19" Foreground="Black"
+                    pu:ButtonHelper.HoverBrush="#FF6000" pu:ButtonHelper.CornerRadius="12" Canvas.Left="715" Canvas.Top="378" Click="Button11_Click" Visibility="Hidden" x:Name="cancel1" />
+                <Button  Height="30" Width="112" Content="取消" pu:ButtonHelper.ClickStyle="Sink" FontFamily="Microsoft Yahei" Background="Yellow" FontSize="19" Foreground="Black"
+                    pu:ButtonHelper.HoverBrush="#FF6000" pu:ButtonHelper.CornerRadius="12" Canvas.Left="579" Canvas.Top="378" Click="Button12_Click" Visibility="Hidden" x:Name="cancel2"/>
+                <Button  Height="30" Width="112" Content="取消" pu:ButtonHelper.ClickStyle="Sink" FontFamily="Microsoft Yahei" Background="Yellow" FontSize="19" Foreground="Black"
+                    pu:ButtonHelper.HoverBrush="#FF6000" pu:ButtonHelper.CornerRadius="12" Canvas.Left="440" Canvas.Top="378" Click="Button13_Click" Visibility="Hidden" x:Name="cancel3"/>
+                <Button  Height="30" Width="112" Content="取消" pu:ButtonHelper.ClickStyle="Sink" FontFamily="Microsoft Yahei" Background="Yellow" FontSize="19" Foreground="Black"
+                    pu:ButtonHelper.HoverBrush="#FF6000" pu:ButtonHelper.CornerRadius="12" Canvas.Left="301" Canvas.Top="378" Click="Button14_Click" Visibility="Hidden" x:Name="cancel4"/>
+                <Button  Height="30" Width="112" Content="取消" pu:ButtonHelper.ClickStyle="Sink" FontFamily="Microsoft Yahei" Background="Yellow" FontSize="19" Foreground="Black"
+                    pu:ButtonHelper.HoverBrush="#FF6000" pu:ButtonHelper.CornerRadius="12" Canvas.Left="152" Canvas.Top="378" Click="Button15_Click" Visibility="Hidden" x:Name="cancel5"/>
+                <Button  Height="30" Width="112" Content="取消" pu:ButtonHelper.ClickStyle="Sink" FontFamily="Microsoft Yahei" Background="Yellow" FontSize="19" Foreground="Black"
+                    pu:ButtonHelper.HoverBrush="#FF6000" pu:ButtonHelper.CornerRadius="12" Canvas.Left="15" Canvas.Top="378" Click="Button16_Click" Visibility="Hidden" x:Name="cancel6"/>
             </Canvas>
         </Viewbox>
     </Grid>

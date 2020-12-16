@@ -19,16 +19,31 @@ namespace SJ_Project
     /// <summary>
     /// InfoWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class InfoWindow : Window
+    public partial class ModelInfoWindow : Window
     {
-        public InfoWindow(List<float> list, GwType type)
+        public ModelInfoWindow(float data, GwType type, bool mark)
         {
             InitializeComponent();
 
             NgName.Text = type.ToString();
 
-            Nglist.ItemsSource = list;
-            Nglist.Items.Refresh();
+            dataBox.Text = data.ToString();
+            dataBox.Background = mark ? Brushes.SteelBlue : Brushes.Red;
+
+            StartCloseTimer();
+        }
+
+        public ModelInfoWindow(float data1,float data2, GwType type, bool mark1,bool mark2)
+        {
+            InitializeComponent();
+
+            NgName.Text = type.ToString();
+
+            dataBox.Text = data1.ToString();
+            dataBox.Background = mark1 ? Brushes.SteelBlue : Brushes.Red;
+
+            dataBox_Copy.Text = data2.ToString();
+            dataBox_Copy.Background = mark2 ? Brushes.SteelBlue : Brushes.Red;
 
             StartCloseTimer();
         }
