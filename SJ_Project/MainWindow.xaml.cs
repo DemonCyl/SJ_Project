@@ -102,6 +102,14 @@ namespace SJ_Project
 
             //CycleDataRead();
 
+            //List<float> ss = new List<float>();
+            //for(int i = 0;i<8;i++)
+            //{
+
+            //ss.Add(1f);
+            //}
+            //bushlist.ItemsSource = ss;
+
             //try
             //{
             //    dataService.ReadData(GwType.小径);
