@@ -553,7 +553,7 @@ namespace SJ_Project
                                             crow1.CreateCell(1).SetCellValue("活塞高度数据");
                                             for (int i = 0; i < flist1.Count(); i++)
                                             {
-                                                crow.CreateCell(i + 2).SetCellValue(flist1[i]);
+                                                crow1.CreateCell(i + 2).SetCellValue(flist1[i]);
                                             }
                                             row += 1;
 
@@ -1085,7 +1085,7 @@ namespace SJ_Project
                                             crow.CreateCell(1).SetCellValue("BUSH数据");
                                             for (int i = 0; i < flist.Count(); i++)
                                             {
-                                                crow.CreateCell(i + 1).SetCellValue(flist[i]);
+                                                crow.CreateCell(i + 2).SetCellValue(flist[i]);
                                             }
                                             row += 1;
                                             workbook.Write(fs);
@@ -1115,7 +1115,7 @@ namespace SJ_Project
                                                 crow.CreateCell(1).SetCellValue("BUSH数据");
                                                 for (int i = 0; i < flist.Count(); i++)
                                                 {
-                                                    crow.CreateCell(i + 1).SetCellValue(flist[i]);
+                                                    crow.CreateCell(i + 2).SetCellValue(flist[i]);
                                                 }
                                                 row += 1;
                                                 workbook.Write(fs);
